@@ -2,8 +2,7 @@ import type { TMDBResult, TMDBProvider, TMDBSeason } from './types'
 
 const BASE  = 'https://api.themoviedb.org/3'
 const IMG   = 'https://image.tmdb.org/t/p'
-const TOKEN = () => process.env.NEXT_PUBLIC_TMDB_TOKEN ||
-  'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NGM3MWYzMTdjMGI2NTM3YmUzZGM3ODFlMzZhOTNjMiIsIm5iZiI6MTc4MzY4MTY4OS41MDg5OTk4LCJzdWIiOiI2YTUwZDI5OThiYjUzMmUxODlkNTQwMTgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.1Z2ZNcSiLFVCR6HE7ffuiAcKpH_rgrccKEATwd8PHKg'
+const TOKEN = () => process.env.NEXT_PUBLIC_TMDB_TOKEN || ''
 
 async function apiFetch<T>(path: string): Promise<T> {
   const token = TOKEN()

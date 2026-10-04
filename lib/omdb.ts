@@ -1,5 +1,5 @@
 const OMDB_BASE = 'https://www.omdbapi.com'
-const OMDB_KEY  = () => process.env.NEXT_PUBLIC_OMDB_KEY || 'b087f981'
+const OMDB_KEY  = () => process.env.NEXT_PUBLIC_OMDB_KEY || ''
 
 export interface OmdbRatings {
   imdbRating?: string; rottenTomatoes?: string; metacritic?: string
