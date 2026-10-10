@@ -1,0 +1,13 @@
+services:
+  roscatv:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER:-amoszp}/roscatv:${ROSCATV_TAG:-latest}
+    container_name: roscatv
+    restart: unless-stopped
+    # No docker-compose.yml existed for this app before — created from scratch.
+    # Port matches the one already live on Chiquito nodo 1 (see the vault's
+    # Chiquito note) — this replaces the old manually-run container, it does
+    # not claim a new port.
+    ports:
+      - "${ROSCATV_PORT:-1100}:3000"
+    environment:
+      - TZ=${TZ:-Europe/Berlin}
