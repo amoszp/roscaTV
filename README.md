@@ -14,7 +14,7 @@ Added a dedicated Home screen (`components/home/HomeScreen.tsx`, `PosterCard.tsx
 
 Also removed unused legacy UI (`ArcDial.tsx`, `WheelPicker.tsx`, `GearIcon.tsx`, `SearchIcon.tsx`, `SettingsModal.tsx`) and added `MediaTypeIcon.tsx` / `lib/statusStyles.ts`.
 
-Not yet implemented: filtering the "Interests" section by which streaming platforms Moe is actively subscribed to (would need a new settings screen plus TMDB's `/watch/providers` endpoint).
+Not yet implemented: filtering the "Interests" section by which streaming platforms the user is subscribed to (would need a new settings screen plus TMDB's `/watch/providers` endpoint).
 
 ---
 
