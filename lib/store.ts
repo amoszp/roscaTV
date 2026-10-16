@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { Tab, SubTab, SortKey, Library, LibraryItem, AppSettings, TMDBResult } from './types'
-import { loadLibrary, saveItem, deleteItem, loadSettings, saveSettings } from './db'
+import { loadLibrary, saveItem, deleteItem, loadSettings, saveSettings, pullFromServer } from './db'
+import { SERVER_SYNC } from './api'
 
 interface SheetState { result: TMDBResult; item: LibraryItem | null }
 
@@ -35,7 +36,13 @@ export const useStore = create<AppState>((set, get) => ({
   setSearchResults: (r) => set({ searchResults: r }),
   setIsSearching: (v) => set({ isSearching: v }),
   library: {},
-  loadLibrary: async () => { const lib = await loadLibrary(); set({ library: lib }) },
+  loadLibrary: async () => {
+    // Show this browser's copy at once, then the server's version when it arrives.
+    set({ library: await loadLibrary() })
+    if (!SERVER_SYNC) return
+    const pulled = await pullFromServer()
+    if (pulled) set({ library: pulled.library, settings: pulled.settings })
+  },
   upsertItem: async (item) => {
     const full = { ...item, updatedAt: Date.now() }
     await saveItem(full)

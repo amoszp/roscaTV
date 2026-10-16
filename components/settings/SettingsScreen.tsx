@@ -5,6 +5,7 @@ import { exportLibrary, importLibrary } from '@/lib/db'
 import { prewarmConfig, syncItemFull } from '@/lib/mediaSync'
 import { resolveId } from '@/hooks/usePosterSync'
 import { useT, type Lang, type Translations } from '@/lib/i18n'
+import { useAccount } from '@/components/auth/account'
 import type { ExportData, LibraryItem } from '@/lib/types'
 
 const REGIONS = [
@@ -69,6 +70,7 @@ export default function SettingsScreen() {
   const t = useT()
   const { settings, updateSettings, showToast, loadLibrary:reloadLib, upsertItem } = useStore()
   const fileRef = useRef<HTMLInputElement>(null)
+  const account = useAccount()
 
   const handleExport = async () => {
     const data = await exportLibrary()
@@ -150,7 +152,14 @@ export default function SettingsScreen() {
           <input ref={fileRef} type="file" accept=".json" onChange={handleImport} aria-hidden="true" />
         </Card>
 
-        <p className="text-center" style={{ fontSize:10, color:'var(--text-faint)' }}>{t.settings.localDataNote}</p>
+        {account && (
+          <Card title={t.account.title}>
+            <p style={{ fontSize:12, color:'var(--text-muted)', marginBottom:12 }}>{t.account.signedInAs(account.user.displayName || account.user.username)}</p>
+            <Btn label={t.account.signOut} icon={<SignOutIcon />} onClick={account.signOut} />
+          </Card>
+        )}
+
+        <p className="text-center" style={{ fontSize:10, color:'var(--text-faint)' }}>{account ? t.account.syncedNote : t.settings.localDataNote}</p>
       </div>
     </div>
   )
@@ -186,6 +195,13 @@ function UploadIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+    </svg>
+  )
+}
+function SignOutIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
     </svg>
   )
 }
