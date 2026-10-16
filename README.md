@@ -38,6 +38,30 @@ Get a free TMDB token at: **https://www.themoviedb.org/settings/api**
 
 ---
 
+## Self-hosted mode: accounts and a server-side library
+
+The Docker image is built with `NEXT_PUBLIC_SERVER_SYNC=1`. In that mode:
+
+- A sign-in screen sits in front of the app (sign in, or create an account). Accounts live in a separate shared accounts service, reached over a private Docker network (`ACCOUNTS_URL`, `ACCOUNTS_SERVICE_TOKEN`); RoscaTV stores no passwords.
+- Each user's library and settings are kept by the server in SQLite (`DB_PATH`, default `/app/data/roscatv.db` in the image — mount a host folder on `/app/data`, writable by uid 1001).
+- The browser keeps a copy (IndexedDB + localStorage, as before), so the app opens instantly and works offline. Every change is written to the copy and queued; the queue is sent in order whenever the server can be reached. Reopening the app reloads the library from the server.
+- The first time an account with an empty library signs in, the library this browser kept before accounts is copied to the server (once; a backup copy stays in localStorage under `rosca_lib_before_account`). Signing out removes this account's copy from the browser.
+
+API (all JSON, session cookie or `Authorization: Bearer <api key>`):
+
+| Method | Path | |
+|---|---|---|
+| `POST` | `/api/auth/login` · `/api/auth/signup` · `/api/auth/logout` | session |
+| `GET` | `/api/auth/me` | the signed-in user |
+| `GET` | `/api/library` | `{ library, settings }` |
+| `PUT` / `DELETE` | `/api/library/:id` | save one item whole / remove it |
+| `PUT` | `/api/settings` | `{ region, sortKey, language }` |
+| `POST` | `/api/import` | `{ library, settings }`, only into an empty account |
+
+Server settings go in `.env` next to `docker-compose.yml` (see `.env.example`). Tests: `npm test`.
+
+Builds without the variable (e.g. Vercel) are unchanged: no sign-in, everything stays in the browser.
+
 ## Deploy to Vercel
 
 1. Push your fork to GitHub

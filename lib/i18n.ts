@@ -109,6 +109,20 @@ const dict = {
       localDataNote: 'All data is stored locally on this device.',
     },
 
+    account: {
+      signInTitle: 'Sign in to see your library.', createTitle: 'Create account', createSub: 'Your library, on every device.',
+      name: 'Name', username: 'Username', password: 'Password', repeatPassword: 'Repeat password',
+      signIn: 'Sign in', create: 'Create account', oneMoment: 'One moment…',
+      toSignup: 'No account? Create one', toLogin: 'I already have an account',
+      usernameHint: 'Username: lowercase letters, numbers, dot, dash or underscore.',
+      passwordsDiffer: 'The passwords don’t match.',
+      errOffline: 'No connection. Try again in a moment.', errWrong: 'Wrong username or password.',
+      errTaken: 'That username is taken.', errTooMany: 'Too many attempts. Wait a few minutes.',
+      cantReach: 'Can’t reach RoscaTV', checkConnection: 'Check your connection and try again.', tryAgain: 'Try again',
+      title: 'Account', signedInAs: (name: string) => `Signed in as ${name}`, signOut: 'Sign out',
+      syncedNote: 'Your library is saved on your server and kept in sync across your devices.',
+    },
+
     sheet: {
       close: 'Close',
       detailsFor: (title: string) => `Details for ${title}`,
@@ -248,6 +262,20 @@ const dict = {
       importedToast: (n: number) => `${n} título${n !== 1 ? 's' : ''} importado${n !== 1 ? 's' : ''} ✓ — sincronizando…`,
       syncedToast: (n: number) => `✓ ${n} título${n !== 1 ? 's' : ''} sincronizado${n !== 1 ? 's' : ''}`,
       localDataNote: 'Todos los datos se guardan localmente en este dispositivo.',
+    },
+
+    account: {
+      signInTitle: 'Inicia sesión para ver tu biblioteca.', createTitle: 'Crear cuenta', createSub: 'Tu biblioteca, en todos tus dispositivos.',
+      name: 'Nombre', username: 'Usuario', password: 'Contraseña', repeatPassword: 'Repite la contraseña',
+      signIn: 'Entrar', create: 'Crear cuenta', oneMoment: 'Un momento…',
+      toSignup: '¿Sin cuenta? Crea una', toLogin: 'Ya tengo cuenta',
+      usernameHint: 'Usuario: minúsculas, números, punto, guion o guion bajo.',
+      passwordsDiffer: 'Las contraseñas no coinciden.',
+      errOffline: 'Sin conexión. Inténtalo en un momento.', errWrong: 'Usuario o contraseña incorrectos.',
+      errTaken: 'Ese usuario ya existe.', errTooMany: 'Demasiados intentos. Espera unos minutos.',
+      cantReach: 'No se puede conectar con RoscaTV', checkConnection: 'Revisa la conexión y vuelve a intentarlo.', tryAgain: 'Reintentar',
+      title: 'Cuenta', signedInAs: (name: string) => `Sesión iniciada como ${name}`, signOut: 'Cerrar sesión',
+      syncedNote: 'Tu biblioteca se guarda en tu servidor y se sincroniza entre tus dispositivos.',
     },
 
     sheet: {
