@@ -1,10 +1,18 @@
 import type { TMDBResult, TMDBProvider, TMDBSeason } from './types'
+import { SERVER_SYNC } from './api'
 
 const BASE  = 'https://api.themoviedb.org/3'
 const IMG   = 'https://image.tmdb.org/t/p'
 const TOKEN = () => process.env.NEXT_PUBLIC_TMDB_TOKEN || ''
 
 async function apiFetch<T>(path: string): Promise<T> {
+  if (SERVER_SYNC) {
+    // Self-hosted build: through RoscaTV's own server, which holds the token
+    // (app/api/tmdb); the browser never sees it.
+    const res = await fetch(`/api/tmdb${path}`, { credentials: 'same-origin' })
+    if (!res.ok) throw new Error(`TMDB ${res.status}`)
+    return res.json() as Promise<T>
+  }
   const token = TOKEN()
   if (token) {
     const res = await fetch(`${BASE}${path}`, { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } })

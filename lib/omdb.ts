@@ -1,3 +1,5 @@
+import { SERVER_SYNC } from './api'
+
 const OMDB_BASE = 'https://www.omdbapi.com'
 const OMDB_KEY  = () => process.env.NEXT_PUBLIC_OMDB_KEY || ''
 
@@ -13,7 +15,10 @@ interface OmdbResponse {
 export async function fetchOmdbByImdbId(imdbId: string): Promise<OmdbRatings | null> {
   if (!imdbId || !imdbId.startsWith('tt')) return null
   try {
-    const res = await fetch(`${OMDB_BASE}/?apikey=${OMDB_KEY()}&i=${imdbId}&plot=none`)
+    // Self-hosted build: through RoscaTV's own server, which holds the key (app/api/omdb).
+    const res = SERVER_SYNC
+      ? await fetch(`/api/omdb?i=${encodeURIComponent(imdbId)}`, { credentials: 'same-origin' })
+      : await fetch(`${OMDB_BASE}/?apikey=${OMDB_KEY()}&i=${imdbId}&plot=none`)
     if (!res.ok) return null
     const data: OmdbResponse = await res.json()
     if (data.Response !== 'True') return null

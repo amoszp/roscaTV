@@ -46,6 +46,7 @@ The Docker image is built with `NEXT_PUBLIC_SERVER_SYNC=1`. In that mode:
 - Each user's library and settings are kept by the server in SQLite (`DB_PATH`, default `/app/data/roscatv.db` in the image — mount a host folder on `/app/data`, writable by uid 1001).
 - The browser keeps a copy (IndexedDB + localStorage, as before), so the app opens instantly and works offline. Every change is written to the copy and queued; the queue is sent in order whenever the server can be reached. Reopening the app reloads the library from the server.
 - The first time an account with an empty library signs in, the library this browser kept before accounts is copied to the server (once; a backup copy stays in localStorage under `rosca_lib_before_account`). Signing out removes this account's copy from the browser.
+- TMDB and OMDb go through the server: the keys are runtime settings (`TMDB_TOKEN`, `OMDB_KEY` in `.env`), never baked into the image or sent to the browser. Only signed-in users can use them, and only for the requests the app makes (search, a title's details, providers, recommendations, external ids, configuration; OMDb by IMDb id), so the routes are not an open relay. Without them, search returns nothing.
 
 API (all JSON, session cookie or `Authorization: Bearer <api key>`):
 
@@ -57,6 +58,8 @@ API (all JSON, session cookie or `Authorization: Bearer <api key>`):
 | `PUT` / `DELETE` | `/api/library/:id` | save one item whole / remove it |
 | `PUT` | `/api/settings` | `{ region, sortKey, language }` |
 | `POST` | `/api/import` | `{ library, settings }`, only into an empty account |
+| `GET` | `/api/tmdb/<path>` | TMDB with the server's token (allowed paths only) |
+| `GET` | `/api/omdb?i=tt…` | OMDb ratings with the server's key |
 
 Server settings go in `.env` next to `docker-compose.yml` (see `.env.example`). Tests: `npm test`.
 
